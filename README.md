@@ -1,52 +1,75 @@
-# CubemapMaker for Resonite
+# CubemapSnapshot for Resonite
 
-A Unity tool for exporting Reflection Probes to Resonite-compatible cubemaps.
+A Unity tool for exporting Reflection Probes to Resonite-compatible cubemaps. This tool makes it easy to convert Unity's Reflection Probes into the format needed for Resonite's cubemap system.
+OR
+If you just want a Pretty Photo of your Unity Scene!
+This is made for Unity Editor: Intended for VRChat Maps you own, or created yourself! It brings over important reflection data for other games, or, just to see the map for yourself!
 
 ## Features
 
-- Export Unity Reflection Probes to cubemap images
-- Support for PNG, JPG, and WebP formats
-- Automatic folder organization
-- Preview capture results
-- Advanced capture settings
-- Debug logging options
+- Export Reflection Probes to cubemap images - for Resonite's Cubemap Creator
+- Support for PNG (recommended), JPG, and WebP formats
+- Automatic folder management for captured Cubemap Photos
+- Preview of captured faces
+- User-friendly Unity Editor interface
+- Cubemap Image Resolution Slider - 256 to 8192
+  - **Note**: Resolutions above 4K (4096) require significant VRAM and are not recommended for most use cases
+  - High resolutions may cause Unity to become unresponsive during capture - its normal!
 
 ## Requirements
 
-- Unity 2020.3 or newer
-- Resonite (for using the exported cubemaps)
+- Unity 2022.3 or newer
+- (Optional) A Reflection Probe/s in your scene (baked or realtime)
+- Sufficient RAM for your chosen resolution
 
 ## Installation
 
-1. Clone this repository into your Unity project's Assets folder
-2. The tool will be available in the Unity Editor
+1. Download the latest release from the [Releases](https://github.com/nalathethird/CubemapSnapshot/releases/latest) page
+2. Import the package into your Unity project
 
-## Usage
+## How To Use
 
-1. Add the `CubemapSnapshot` component to any GameObject with a Reflection Probe
-2. Configure the capture settings in the inspector
-3. Click "Capture Cubemap" to generate the cubemap
-4. Find the exported files in the `CubemapOutput` folder
+1. Add the CubemapSnapshot component to any GameObject in your scene - with or without a Reflection Probe on the GameObject
+2. Configure your desired settings:
+   - Resolution: Choose based on your needs (256-8192)
+   - Format: PNG (recommended), JPG, or WebP (experimental)
+   - Output folder will be automatically managed
+3. Enter Play-mode to activate the script
+4. Press "Capture Cubemap" to run the script!
 
-## Settings
+### Format Recommendations
 
-### Format Settings
-- **Image Format**: Choose between PNG, JPG, or WebP
-- **Quality**: Adjust compression quality for JPG and WebP formats
+- **PNG**: Recommended format. Provides the best quality with lossless compression
+- **JPG**: Good alternative when file size is a concern
+- **WebP**: Currently in experimental/beta status. May have quality issues in some cases -  feel free to make a pull request if you can fix this!
 
-### Capture Settings
-- **Resolution**: Set the cubemap resolution (recommended: 2048)
-- **Include Skybox**: Toggle skybox inclusion in the capture
-- **Culling Mask**: Configure which layers to include in the capture
+## Credits
 
-### Advanced Settings
-- **Show Debug Logs**: Enable detailed logging
-- **Show Capture Preview**: Preview the capture results
+- Created by [nalathethird](https://github.com/nalathethird)
+- WebP support powered by [libwebp](https://developers.google.com/speed/webp/docs/api) by Google
+- Special thanks to the Resonite for the PressKit Assets for the UI images, and their community for testing and feedback
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Reporting Issues
+
+If you encounter any issues, please:
+1. Check the [Issues](https://github.com/nalathethird/CubemapSnapshot/issues) page to see if it's already reported
+2. If not, create a new issue with:
+   - Unity version
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Screenshots if applicable
+   - Export settings used (resolution, format)
+   - Errors in Unity Console
+   - (Optional) Steps taken to Import Images to Resonite
+
+## Known Issues
+
+- WebP format is currently in experimental/beta status and may have quality issues - Again, make a pull request if you can fix this issue!
