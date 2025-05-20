@@ -44,14 +44,14 @@ namespace CubemapMaker
         [SerializeField, HideInInspector]
         private bool hasHighResolutionConsent = false;
 
-        private readonly string[] faceNames = { "Right", "Left", "Up", "Down", "Front", "Back" };
+        private readonly string[] faceNames = { "Left", "Right", "Top", "Bottom", "Front", "Back" };
         private readonly Vector3[] faceDirections = {
-            Vector3.right, Vector3.left, Vector3.up,
+            Vector3.left, Vector3.right, Vector3.up,
             Vector3.down, Vector3.forward, Vector3.back
         };
         private readonly Vector3[] faceUpVectors = {
-            Vector3.up, Vector3.up, Vector3.forward,
-            Vector3.back, Vector3.up, Vector3.up
+            Vector3.down, Vector3.down, Vector3.forward,
+            Vector3.back, Vector3.down, Vector3.down
         };
 
         private CubemapObjectIndex objectIndex;
@@ -353,6 +353,30 @@ namespace CubemapMaker
             }
         }
 
+        // Transform Unity coordinates to Resonite coordinates
+        private Vector3 TransformToResoniteCoords(Vector3 unityVector)
+        {
+            // Unity (Left-handed): Y up, Z forward, X right
+            // Resonite (Right-handed): Z up, Y forward, X right
+            // To convert from left to right-handed, we need to flip the Z axis
+            return new Vector3(
+                unityVector.x,   // X stays the same
+                unityVector.z,   // Y in Unity becomes Z in Resonite
+                -unityVector.y   // Z in Unity becomes -Y in Resonite (flipped for right-handed)
+            );
+        }
+
+        private Quaternion TransformToResoniteRotation(Quaternion unityRotation)
+        {
+            // Convert Unity rotation to Resonite rotation
+            Vector3 euler = unityRotation.eulerAngles;
+            return Quaternion.Euler(
+                euler.x,     // X rotation stays the same
+                euler.z,     // Y in Unity becomes Z in Resonite
+                -euler.y     // Z in Unity becomes -Y in Resonite (flipped for right-handed)
+            );
+        }
+
         private void StartCapture(string outputPath, Vector3 position, ReflectionProbe probe)
         {
             // CRITICAL PATH CHECK - Don't use the Assets folder directly
@@ -411,7 +435,22 @@ namespace CubemapMaker
             {
                 currentCapture.cameraObjects[i] = new GameObject($"CubemapCam_{faceNames[i]}");
                 currentCapture.cameraObjects[i].transform.position = position;
-                currentCapture.cameraObjects[i].transform.rotation = Quaternion.LookRotation(faceDirections[i], faceUpVectors[i]);
+                
+                // Transform the rotation to Resonite's coordinate system
+                Vector3 direction = TransformToResoniteCoords(faceDirections[i]);
+                Vector3 up = TransformToResoniteCoords(faceUpVectors[i]);
+                Quaternion baseRotation = Quaternion.LookRotation(direction, up);
+
+                // Apply 180-degree rotation ONLY to Top and Bottom faces
+                if (i == 2 || i == 3) // Top, Bottom
+                {
+                    baseRotation *= Quaternion.Euler(0, 180, 0);
+                }
+
+                // Apply global -90 degree X rotation
+                baseRotation = Quaternion.Euler(-90, 0, 0) * baseRotation;
+
+                currentCapture.cameraObjects[i].transform.rotation = baseRotation;
 
                 var cam = currentCapture.cameraObjects[i].AddComponent<Camera>();
                 cam.fieldOfView = 90;
