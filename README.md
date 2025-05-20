@@ -27,6 +27,9 @@ This is made for Unity Editor: Intended for VRChat Maps you own, or created your
 1. Download the latest release from the [Releases](https://github.com/nalathethird/CubemapSnapshot/releases/latest) page
 2. Import the package into your Unity project
 
+![image](https://github.com/user-attachments/assets/7c861c60-cdef-4d25-82d5-f31299b681bd)
+
+
 ## How To Use
 
 1. Add the CubemapSnapshot component to any GameObject in your scene - with or without a Reflection Probe on the GameObject
